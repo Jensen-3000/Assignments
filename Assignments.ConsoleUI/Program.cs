@@ -3,6 +3,7 @@ using Assignments.ConsoleUI.Football;
 using Assignments.ConsoleUI.Password;
 using Assignments.Logic.Dance;
 using System;
+using System.Configuration;
 
 namespace Assignments.ConsoleUI
 {
@@ -17,8 +18,8 @@ namespace Assignments.ConsoleUI
 
         // Set your database location and minimum pw length through the configuration App.config
         //  Or you can hard code these values and make them a private const string
-        private static string DatabasePath = "credentials.txt"; //ConfigurationManager.AppSettings["DatabaseLocation"];
-        private static string MinimumPasswordLength = "12" ; //ConfigurationManager.AppSettings["MinimumPasswordLength"];
+        private static string DatabasePath = ConfigurationManager.AppSettings["DatabaseLocation"];
+        private static string MinimumPasswordLength = ConfigurationManager.AppSettings["MinimumPasswordLength"];
 
 
         static void Main(string[] args)
@@ -29,7 +30,6 @@ namespace Assignments.ConsoleUI
                 consoleApp.MainMenu(); // Keeps the MainMenu up indefinitely
             }
         }
-
 
 
         /// <summary>
