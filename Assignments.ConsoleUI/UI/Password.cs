@@ -8,11 +8,12 @@ namespace Assignments.ConsoleUI.Password
     /// </summary>
     internal class PasswordUI
     {
-        private const string _optionMenu = @"AccountManager: " +
-                                           "\n\t(1) Login User" +
+        private const string _optionMenu = "AccountManager: " +
+                                           "\n\t(1) {0}" +
                                            "\n\t(2) Create User" +
                                            "\n\t(3) Change Password" +
-                                           "\n\t(0) Exit";
+                                           "\n\t(0) Return";
+        
         private bool _loggedIn = false;
 
         private readonly PasswordLogic _logic;
@@ -27,17 +28,21 @@ namespace Assignments.ConsoleUI.Password
         /// </summary>
         internal void UserAccountMenu()
         {
+
             bool quit = false;
             while (!quit)
             {
-                Console.WriteLine(_optionMenu);
+                Console.WriteLine(string.Format(_optionMenu, _loggedIn ? "Logout" : "Login User"));
                 switch (Console.ReadLine())
                 {
                     case "0":
                         quit = true;
                         break;
                     case "1":
-                        Login();
+                        if (!_loggedIn)
+                            Login();
+                        else 
+                            Logout();
                         break;
                     case "2":
                         CreateUser();
@@ -85,14 +90,12 @@ namespace Assignments.ConsoleUI.Password
         private void Login()
         {
             int attempt = 0;
-            while (!_loggedIn || ++attempt < 4)
+            while (!_loggedIn && ++attempt < 4)
             {
                 Console.Write("Enter your username: ");
                 string username = Console.ReadLine().ToLower();
-
                 Console.Write("Enter your password: ");
                 string password = Console.ReadLine();
-                
                 _loggedIn = _logic.LoadCredentials(username, password);
                 if (!_loggedIn)
                 {
@@ -101,8 +104,16 @@ namespace Assignments.ConsoleUI.Password
                 else
                 {
                     Console.WriteLine("Logged in...");
+                    return;
                 }
             }
+            Console.WriteLine("4 failed login attempts. Returning to Account menu...");
+        }
+
+        public void Logout()
+        {
+            _loggedIn = false;
+            Console.WriteLine("You have been successfully logged out.");
         }
 
         /// <summary>

@@ -14,6 +14,7 @@ namespace Assignments.Logic.Password
 
         public PasswordLogic(string dbPath, int minimumPwLength)
         {
+            _userAccount = new UserAccount();
             PATH = dbPath;
             MINIMUM_PASSWORD_LENGTH = minimumPwLength;
             CreateDBIfNotFound();
@@ -21,8 +22,8 @@ namespace Assignments.Logic.Password
 
         public void CreateUser(string username, string password)
         {
-
-            _userAccount = new UserAccount(username, password);
+            _userAccount.Username = username;
+            _userAccount.Password = password;
             File.WriteAllText(PATH, _userAccount.Username + "\n" + _userAccount.Password);
         }
 
@@ -104,8 +105,13 @@ namespace Assignments.Logic.Password
 
         public bool LoadCredentials(string username, string password)
         {
-            _userAccount.Username = File.ReadLines(PATH).First();
-            _userAccount.Password = File.ReadLines(PATH).Last();
+            var lines = File.ReadLines(PATH);
+            if (!lines.Any())
+            {
+                return false;
+            }
+            _userAccount.Username = lines.FirstOrDefault();
+            _userAccount.Password = lines.LastOrDefault();
             return (username == _userAccount.Username && password == _userAccount.Password);
         }
 

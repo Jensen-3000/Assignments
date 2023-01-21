@@ -2,6 +2,10 @@
 {
     internal class UserAccount
     {
+        public UserAccount()
+        {
+        }
+
         public UserAccount(string username, string password)
         {
             Username = username;
