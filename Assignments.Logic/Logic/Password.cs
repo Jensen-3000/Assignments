@@ -8,8 +8,8 @@ namespace Assignments.Logic.Password
     {
         private UserAccount _userAccount;
 
-        public readonly int MINIMUM_PASSWORD_LENGTH; //= 12;
-        private readonly string PATH; //= "credentials.txt";
+        public readonly int MINIMUM_PASSWORD_LENGTH; // 12;
+        private readonly string PATH; // credentials.txt;
 
 
         public PasswordLogic(string dbPath, int minimumPwLength)

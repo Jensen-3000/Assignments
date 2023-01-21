@@ -19,6 +19,20 @@ namespace Assignments.Tests
             //Arrange
             _password = new PasswordLogic(DatabasePath, int.Parse(MinimumPasswordLength));
         }
+        
+        [TestMethod]
+        #region DataForTest
+        [DataRow("validuser", "ValidPassword1+", ValidationResult.PasswordIsValid)]
+        [DataRow("invaliduser", "invalidpassword", ValidationResult.HasNoUpperCaseError)]
+        #endregion
+        public void ValidatePassword_ValidAndInvalidInput_ReturnsValidationResult(string username, string password, ValidationResult expected)
+        {
+            // Arrange is done in Setup method
+            // Act
+            var actual = _password.ValidatePassword(username, password);
+            // Assert
+            Assert.AreEqual(expected, actual);
+        }
 
 
         [TestMethod]
