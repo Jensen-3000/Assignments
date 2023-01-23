@@ -1,6 +1,8 @@
 ﻿using Assignments.Logic.Dance;
 using System;
-
+using System.Linq;
+using System.Linq.Expressions;
+using System.Runtime.Remoting.Messaging;
 
 namespace Assignments.ConsoleUI.Dance
 {
@@ -17,15 +19,17 @@ namespace Assignments.ConsoleUI.Dance
         /// <returns>A dance competitor model</returns>
         internal DanceCompetitor GetDancer()
         {
+            int points;
+
             Console.WriteLine("Enter dancer name:");
             string name = Console.ReadLine(); // Todo: Need some validation
 
             Console.WriteLine("Enter dancer points:");
-            int points = int.Parse(Console.ReadLine()); // Todo: Need some validation
-            
-            DanceCompetitor danceCompetitor = new DanceCompetitor(name, points);
-
-            return danceCompetitor;
+            while (!int.TryParse(Console.ReadLine(), out points))
+            {
+                Console.WriteLine("Enter a valid number");
+            }
+            return new DanceCompetitor(name, points);
         }
     }
 }

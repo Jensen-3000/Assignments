@@ -10,7 +10,7 @@ namespace Assignments.Tests
     {
         PasswordLogic _password;
 
-        private static string DatabasePath = "credentials.txt";
+        private static string DatabasePath = "DBSimulation.txt";
         private static string MinimumPasswordLength = "12";
 
         [TestInitialize]
