@@ -1,7 +1,6 @@
 ﻿using Assignments.Logic.Password;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.IO;
-using System.Runtime.InteropServices;
 
 namespace Assignments.Tests
 {
@@ -10,7 +9,7 @@ namespace Assignments.Tests
     {
         PasswordLogic _password;
 
-        private static string DatabasePath = "DBSimulation.txt";
+        private static string DatabasePath = "DBSimulationTest.txt";
         private static string MinimumPasswordLength = "12";
 
         [TestInitialize]
@@ -19,7 +18,8 @@ namespace Assignments.Tests
             //Arrange
             _password = new PasswordLogic(DatabasePath, int.Parse(MinimumPasswordLength));
         }
-        
+
+
         [TestMethod]
         #region DataForTest
         [DataRow("validuser", "ValidPassword1+", ValidationResult.PasswordIsValid)]
@@ -27,9 +27,9 @@ namespace Assignments.Tests
         #endregion
         public void ValidatePassword_ValidAndInvalidInput_ReturnsValidationResult(string username, string password, ValidationResult expected)
         {
-            // Arrange is done in Setup method
+            // Arrange is done in [TestInitialize] / Setup method
             // Act
-            var actual = _password.ValidatePassword(username, password);
+            ValidationResult actual = _password.ValidatePassword(username, password);
             // Assert
             Assert.AreEqual(expected, actual);
         }
@@ -42,7 +42,7 @@ namespace Assignments.Tests
         #endregion
         public void IsMinimumLength_ValidAndInvalidLength_ReturnsTrueAndFalse(string input, bool expected)
         {
-            // Arrange is done in Setup method
+            // Arrange is done in [TestInitialize] / Setup method
             // Act
             bool actual = _password.IsMinimumLength(input);
             // Assert
@@ -57,7 +57,7 @@ namespace Assignments.Tests
         #endregion
         public void HasUpperCase_ValidAndInvalidInput_ReturnsTrueAndFalse(string input, bool expected)
         {
-            // Arrange is done in Setup method
+            // Arrange is done in [TestInitialize] / Setup method
             // Act
             bool actual = _password.HasUpperCase(input);
             // Assert
@@ -72,7 +72,7 @@ namespace Assignments.Tests
         #endregion
         public void HasLowerCase_ValidAndInvalidInput_ReturnsTrueAndFalse(string input, bool expected)
         {
-            // Arrange is done in Setup method
+            // Arrange is done in [TestInitialize] / Setup method
             // Act
             bool actual = _password.HasLowerCase(input);
             // Assert
@@ -87,7 +87,7 @@ namespace Assignments.Tests
         #endregion
         public void HasDigit_ValidAndInvalidInput_ReturnsTrueAndFalse(string input, bool expected)
         {
-            // Arrange is done in Setup method
+            // Arrange is done in [TestInitialize] / Setup method
             // Act
             bool actual = _password.HasDigit(input);
             // Assert
@@ -102,7 +102,7 @@ namespace Assignments.Tests
         #endregion
         public void HasSpecialChar_ValidAndInvalidInput_ReturnsTrueAndFalse(string input, bool expected)
         {
-            // Arrange is done in Setup method
+            // Arrange is done in [TestInitialize] / Setup method
             // Act
             bool actual = _password.HasSpecialChar(input);
             // Assert
@@ -117,7 +117,7 @@ namespace Assignments.Tests
         #endregion
         public void CannotHaveSpaces_ValidAndInvalidInput_ReturnsTrueAndFalse(string input, bool expected)
         {
-            // Arrange is done in Setup method
+            // Arrange is done in [TestInitialize] / Setup method
             // Act
             bool actual = _password.CannotHaveSpaces(input);
             // Assert
@@ -135,7 +135,7 @@ namespace Assignments.Tests
         #endregion
         public void CannotHaveNumberAtStartOrEnd_ValidAndInvalidInput_ReturnsTrueAndFalse(string input, bool expected)
         {
-            // Arrange is done in Setup method
+            // Arrange is done in [TestInitialize] / Setup method
             // Act
             bool actual = _password.CannotHaveNumberAtStartOrEnd(input);
             // Assert
@@ -150,8 +150,7 @@ namespace Assignments.Tests
         #endregion
         public void CheckUsernameNotEqualToPassword_ValidAndInvalidInput_ReturnsTrueAndFalse(string username, string password, bool expected)
         {
-            // Arrange
-
+            // Arrange is done in [TestInitialize] / Setup method
             // Act
             bool actual = _password.CheckUsernameNotEqualToPassword(username, password);
 
@@ -167,9 +166,9 @@ namespace Assignments.Tests
         #endregion
         public void CheckIfPreviouslyUsedFromFile_ValidAndInvalidInput_ReturnsTrueAndFalse(string username, string password, string newPassword, bool expected)
         {
+
             // Arrange
-            const string PATH = "credentials.txt";
-            File.WriteAllText(PATH, username + "\n" + password);
+            File.WriteAllText(DatabasePath, username + "\n" + password);
 
             // Act
             bool actual = _password.CheckIfPreviouslyUsedFromFile(newPassword);
@@ -177,6 +176,7 @@ namespace Assignments.Tests
             // Assert
             Assert.AreEqual(expected, actual);
         }
+
 
         [TestMethod]
         #region DataForTest
@@ -186,9 +186,7 @@ namespace Assignments.Tests
         public void LoadCredentials_ValidCredentials_ReturnsTrue(string username, string password, bool expected)
         {
             // Arrange
-            
             _password.CreateUser(username, password);
-
 
             // Act
             bool actual = _password.LoadCredentials(username, password);
@@ -196,8 +194,8 @@ namespace Assignments.Tests
             // Assert
             Assert.AreEqual(expected, actual);
         }
-        
-        
+
+
         [TestMethod]
         #region DataForTest
         [DataRow("validuser", "validpassword", false)]
@@ -206,9 +204,7 @@ namespace Assignments.Tests
         public void LoadCredentials_InvalidCredentials_ReturnsFalse(string username, string password, bool expected)
         {
             // Arrange
-            
             _password.CreateUser("John", "1234");
-
 
             // Act
             bool actual = _password.LoadCredentials(username, password);
