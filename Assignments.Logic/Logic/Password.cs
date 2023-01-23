@@ -13,7 +13,7 @@ namespace Assignments.Logic.Password
         {
             _PATH = dbPath;
             _MINIMUM_PASSWORD_LENGTH = minimumPwLength;
-            CreateDBIfNotFound();
+            EnsureDbFileExists();
         }
 
         public void CreateNewUser(string username, string password)
@@ -107,16 +107,13 @@ namespace Assignments.Logic.Password
             {
                 return false;
             }
-            var loadedUserAccount = new UserAccount(lines.FirstOrDefault(), lines.LastOrDefault());
-            return username == loadedUserAccount.Username && password == loadedUserAccount.Password;
+            return username == lines.FirstOrDefault() && password == lines.LastOrDefault();
         }
 
-        public void CreateDBIfNotFound()
+        public void EnsureDbFileExists()
         {
-            if (!File.Exists(_PATH))
-            {
-                File.Create(_PATH).Dispose();
-            }
+            using (File.Open(_PATH, FileMode.OpenOrCreate)) { }
         }
+
     }
 }

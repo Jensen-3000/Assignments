@@ -44,7 +44,6 @@
     <Compile Include="Logic\Dance.cs" />
     <Compile Include="Logic\Football.cs" />
     <Compile Include="Logic\Password.cs" />
-    <Compile Include="Logic\UserAccount.cs" />
     <Compile Include="Logic\ValidationResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

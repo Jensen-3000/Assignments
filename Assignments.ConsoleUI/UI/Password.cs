@@ -8,9 +8,9 @@ namespace Assignments.ConsoleUI.Password
     /// </summary>
     internal class PasswordUI
     {
-        private const string _optionMenu = "AccountManager: " +
+        private const string _optionMenu = "\nAccountManager: " +
                                            "\n\t(1) {0}" +
-                                           "\n\t(2) Create User" +
+                                           "\n\t(2) Create New Account" +
                                            "\n\t(3) Change Password" +
                                            "\n\t(0) Return";
 
@@ -31,7 +31,7 @@ namespace Assignments.ConsoleUI.Password
             bool quit = false;
             while (!quit)
             {
-                Console.WriteLine(string.Format(_optionMenu, _loggedIn ? "Logout" : "Login User"));
+                Console.WriteLine(string.Format(_optionMenu, _loggedIn ? "Logout" : "Login"));
                 switch (Console.ReadLine())
                 {
                     case "0":
@@ -48,12 +48,13 @@ namespace Assignments.ConsoleUI.Password
                         break;
                     case "3":
                         if (!_loggedIn)
-                            Console.WriteLine("You must be logged in to change your password");
+                            Console.WriteLine("\nYou must be logged in to change your password");
                         else
                             ChangePassword();
                         break;
+
                     default:
-                        Console.WriteLine("Invalid input");
+                        Console.WriteLine("\nInvalid input");
                         break;
                 }
             }
@@ -66,7 +67,7 @@ namespace Assignments.ConsoleUI.Password
         /// </summary>
         private void CreateUser()
         {
-            Console.Write("Enter a username: ");
+            Console.Write("Enter a username: \n");
             string username = Console.ReadLine().ToLower();
             Console.Write("Enter a password: ");
             string password = Console.ReadLine();
@@ -75,6 +76,7 @@ namespace Assignments.ConsoleUI.Password
             if (result == ValidationResult.PasswordIsValid)
             {
                 _logic.CreateNewUser(username, password);
+                Console.WriteLine("Account successfully created.");
             }
             else
             {
@@ -98,21 +100,21 @@ namespace Assignments.ConsoleUI.Password
                 _loggedIn = _logic.VerifyCredentials(username, password);
                 if (!_loggedIn)
                 {
-                    Console.WriteLine("Incorrect login");
+                    Console.WriteLine("\n>>Incorrect login<<");
                 }
                 else
                 {
-                    Console.WriteLine("Logged in...");
+                    Console.WriteLine("\nLogged in...");
                     return;
                 }
             }
-            Console.WriteLine("4 failed login attempts. Returning to Account menu...");
+            Console.WriteLine("\n>>4 failed login attempts. Returning to Account menu...<<");
         }
 
         public void Logout()
         {
             _loggedIn = false;
-            Console.WriteLine("You have been successfully logged out.");
+            Console.WriteLine("\n<<You have been successfully logged out.>>");
         }
 
         /// <summary>
@@ -121,9 +123,8 @@ namespace Assignments.ConsoleUI.Password
         /// </summary>
         public void ChangePassword()
         {
-            Console.Write("Do you want to change your password? (y/n): ");
-            string changePassword = Console.ReadLine();
-            if (changePassword == "y")
+            Console.Write("\nDo you want to change your password? (y/n): ");
+            if (Console.ReadLine() == "y")
             {
                 Console.Write("Enter a new password: ");
                 string newPassword = Console.ReadLine();
@@ -143,37 +144,37 @@ namespace Assignments.ConsoleUI.Password
             switch (result)
             {
                 case ValidationResult.PasswordIsValid:
-                    Console.WriteLine("Password is valid!");
+                    Console.WriteLine("\n<<Password is valid!>>");
                     break;
                 case ValidationResult.NotMinimumLengthError:
-                    Console.WriteLine("Password must be at least 12 characters long.");
+                    Console.WriteLine("\n>>Password must be at least 12 characters long.<<");
                     break;
                 case ValidationResult.HasNoUpperCaseError:
-                    Console.WriteLine("Password must contain at least one uppercase letter.");
+                    Console.WriteLine("\n>>Password must contain at least one uppercase letter.<<");
                     break;
                 case ValidationResult.HasNoLowerCaseError:
-                    Console.WriteLine("Password must contain at least one lowercase letter.");
+                    Console.WriteLine("\n>>Password must contain at least one lowercase letter.<<");
                     break;
                 case ValidationResult.HasNoDigitError:
-                    Console.WriteLine("Password must contain at least one digit.");
+                    Console.WriteLine("\n>>Password must contain at least one digit.<<");
                     break;
                 case ValidationResult.HasNoSpecialCharError:
-                    Console.WriteLine("Password must contain at least one special character.");
+                    Console.WriteLine("\n>>Password must contain at least one special character.<<");
                     break;
                 case ValidationResult.CannotHaveSpacesError:
-                    Console.WriteLine("Password must not contain spaces.");
+                    Console.WriteLine("\n>>Password must not contain spaces.<<");
                     break;
                 case ValidationResult.CannotHaveNumberAtStartOrEndError:
-                    Console.WriteLine("Password must not start or end with a number.");
+                    Console.WriteLine("\n>>Password must not start or end with a number.<<");
                     break;
                 case ValidationResult.CheckUsernameNotEqualToPasswordError:
-                    Console.WriteLine("Password must be different than username.");
+                    Console.WriteLine("\n>>Password must be different than username.<<");
                     break;
                 case ValidationResult.CheckIfPreviouslyUsedFromFileError:
-                    Console.WriteLine("Password must be different from previously used password.");
+                    Console.WriteLine("\n>>Password must be different from previously used password.<<");
                     break;
                 case ValidationResult.PasswordChangedSuccess:
-                    Console.WriteLine("Password changed successfully!");
+                    Console.WriteLine("\n<<Password changed successfully!>>");
                     break;
             }
         }

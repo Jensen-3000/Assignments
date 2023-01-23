@@ -1,8 +1,5 @@
 ﻿using Assignments.Logic.Dance;
 using System;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Runtime.Remoting.Messaging;
 
 namespace Assignments.ConsoleUI.Dance
 {
