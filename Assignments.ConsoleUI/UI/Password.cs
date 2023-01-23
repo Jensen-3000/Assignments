@@ -13,7 +13,7 @@ namespace Assignments.ConsoleUI.Password
                                            "\n\t(2) Create User" +
                                            "\n\t(3) Change Password" +
                                            "\n\t(0) Return";
-        
+
         private bool _loggedIn = false;
 
         private readonly PasswordLogic _logic;
@@ -28,7 +28,6 @@ namespace Assignments.ConsoleUI.Password
         /// </summary>
         internal void UserAccountMenu()
         {
-
             bool quit = false;
             while (!quit)
             {
@@ -41,7 +40,7 @@ namespace Assignments.ConsoleUI.Password
                     case "1":
                         if (!_loggedIn)
                             Login();
-                        else 
+                        else
                             Logout();
                         break;
                     case "2":
@@ -75,7 +74,7 @@ namespace Assignments.ConsoleUI.Password
             ValidationResult result = _logic.ValidatePassword(username, password);
             if (result == ValidationResult.PasswordIsValid)
             {
-                _logic.CreateUser(username, password);
+                _logic.CreateNewUser(username, password);
             }
             else
             {
@@ -96,7 +95,7 @@ namespace Assignments.ConsoleUI.Password
                 string username = Console.ReadLine().ToLower();
                 Console.Write("Enter your password: ");
                 string password = Console.ReadLine();
-                _loggedIn = _logic.LoadCredentials(username, password);
+                _loggedIn = _logic.VerifyCredentials(username, password);
                 if (!_loggedIn)
                 {
                     Console.WriteLine("Incorrect login");

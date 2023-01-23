@@ -6,34 +6,29 @@ namespace Assignments.Logic.Password
 {
     public class PasswordLogic
     {
-        private UserAccount _userAccount;
-
-        public readonly int MINIMUM_PASSWORD_LENGTH; // 12;
-        private readonly string PATH; // credentials.txt;
-
+        private readonly int _MINIMUM_PASSWORD_LENGTH; // 12;
+        private readonly string _PATH; // credentials.txt;
 
         public PasswordLogic(string dbPath, int minimumPwLength)
         {
-            _userAccount = new UserAccount();
-            PATH = dbPath;
-            MINIMUM_PASSWORD_LENGTH = minimumPwLength;
+            _PATH = dbPath;
+            _MINIMUM_PASSWORD_LENGTH = minimumPwLength;
             CreateDBIfNotFound();
         }
 
-        public void CreateUser(string username, string password)
+        public void CreateNewUser(string username, string password)
         {
-            _userAccount.Username = username;
-            _userAccount.Password = password;
-            File.WriteAllText(PATH, _userAccount.Username + "\n" + _userAccount.Password);
+            File.WriteAllText(_PATH, username + "\n" + password);
         }
 
         public ValidationResult ChangePassword(string newPassword)
         {
-            ValidationResult result = ValidatePassword(_userAccount.Username, newPassword);
+            string currentUsername = File.ReadLines(_PATH).FirstOrDefault();
+
+            ValidationResult result = ValidatePassword(currentUsername, newPassword);
             if (result == ValidationResult.PasswordIsValid)
             {
-                _userAccount.Password = newPassword;
-                File.AppendAllText(PATH, "\n" + newPassword);
+                File.AppendAllText(_PATH, "\n" + newPassword);
                 return ValidationResult.PasswordChangedSuccess;
             }
             return result;
@@ -54,11 +49,12 @@ namespace Assignments.Logic.Password
             return ValidationResult.PasswordIsValid;
         }
 
+
         #region ValidationMethods
 
         public bool IsMinimumLength(string password)
         {
-            return password.Length >= MINIMUM_PASSWORD_LENGTH;
+            return password.Length >= _MINIMUM_PASSWORD_LENGTH;
         }
 
         public bool HasUpperCase(string password)
@@ -98,28 +94,28 @@ namespace Assignments.Logic.Password
 
         public bool CheckIfPreviouslyUsedFromFile(string password)
         {
-            return !File.ReadLines(PATH).Contains(password);
+            return !File.ReadLines(_PATH).Contains(password);
         }
 
         #endregion
 
-        public bool LoadCredentials(string username, string password)
+
+        public bool VerifyCredentials(string username, string password)
         {
-            var lines = File.ReadLines(PATH);
+            var lines = File.ReadLines(_PATH);
             if (!lines.Any())
             {
                 return false;
             }
-            _userAccount.Username = lines.FirstOrDefault();
-            _userAccount.Password = lines.LastOrDefault();
-            return (username == _userAccount.Username && password == _userAccount.Password);
+            var loadedUserAccount = new UserAccount(lines.FirstOrDefault(), lines.LastOrDefault());
+            return username == loadedUserAccount.Username && password == loadedUserAccount.Password;
         }
 
         public void CreateDBIfNotFound()
         {
-            if (!File.Exists(PATH))
+            if (!File.Exists(_PATH))
             {
-                File.Create(PATH).Dispose();
+                File.Create(_PATH).Dispose();
             }
         }
     }
