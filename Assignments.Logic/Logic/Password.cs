@@ -5,11 +5,29 @@ using System.Text.RegularExpressions;
 
 namespace Assignments.Logic.Password
 {
+    /// <summary>
+    /// This class contains methods for validating passwords and checking credentials.
+    /// </summary>
+    /// <remarks>
+    /// The class contains methods for checking if a password meets certain requirements, 
+    /// changing a password, and verifying the provided credentials against the credentials stored in a file.
+    /// </remarks>
     public class PasswordLogic
     {
         private readonly int _MINIMUM_PASSWORD_LENGTH; // 12;
         private readonly string _PATH; // credentials.txt;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PasswordLogic"/> class.
+        /// </summary>
+        /// <param name="dbPath">The path of the file that stores the credentials.</param>
+        /// <param name="minimumPwLength">The minimum length of the password</param>
+        /// <remarks>
+        /// The constructor sets the <c>_PATH</c> field to the provided dbPath and 
+        /// <c>_MINIMUM_PASSWORD_LENGTH</c> field to the provided minimumPwLength.
+        /// It also calls the <see cref="EnsureDbFileExists()"/> method to ensure 
+        /// that the file specified by the <c>_PATH</c> field exists.
+        /// </remarks>
         public PasswordLogic(string dbPath, int minimumPwLength)
         {
             _PATH = dbPath;
@@ -17,12 +35,28 @@ namespace Assignments.Logic.Password
             EnsureDbFileExists();
         }
 
+        /// <summary>
+        /// Ensures the DB for storing user credentials exists,
+        /// else creates the file
+        /// </summary>
+        /// <remarks>
+        /// The location of the file specified by the field <c>_PATH</c>
+        /// is read from the appsettings.
+        /// </remarks>
         public void EnsureDbFileExists()
         {
             using (File.Open(_PATH, FileMode.OpenOrCreate)) { }
         }
 
-
+        /// <summary>
+        /// Creates a new user, overwriting the existing contents of the file.
+        /// </summary>
+        /// <param name="username">The username to write to file</param>
+        /// <param name="password">The password to write to file</param>
+        /// <remarks>
+        /// The location of the file specified by the field <c>_PATH</c>
+        /// is read from the appsettings.
+        /// </remarks>
         public void CreateNewUser(string username, string password)
         {
             File.WriteAllText(_PATH, username + "\n" + password);
@@ -47,7 +81,7 @@ namespace Assignments.Logic.Password
             {
                 return false;
             }
-            return username == File.ReadLines(_PATH).FirstOrDefault() 
+            return username == File.ReadLines(_PATH).FirstOrDefault()
                 && password == File.ReadLines(_PATH).LastOrDefault();
         }
 
