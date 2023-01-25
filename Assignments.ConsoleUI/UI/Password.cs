@@ -5,7 +5,7 @@ using System.Security.Policy;
 namespace Assignments.ConsoleUI.Password
 {
     /// <summary>
-    /// A class that handles the UI for password management
+    /// A class that handles the UI for the Password Assignment (3)
     /// </summary>
     internal class PasswordUI
     {
@@ -26,9 +26,11 @@ namespace Assignments.ConsoleUI.Password
 
         /// <summary>
         /// This method shows a menu for managing the account.
-        /// The menu has options for logging in, creating a new account, changing the password 
-        /// and going back to the previous menu.
         /// </summary>
+        /// <remarks>
+        /// The menu has options for logging in and out, creating a new account, changing the password 
+        /// and going back to the previous menu.
+        /// </remarks>
         internal void UserAccountMenu()
         {
             bool quit = false;
@@ -67,11 +69,13 @@ namespace Assignments.ConsoleUI.Password
 
 
         /// <summary>
-        /// This method lets the user create a new account by entering a username and a password.
-        /// The method checks if the password is correct and if it is, it creates a new account.
-        /// 
-        /// Creating a new user overwrites existing user, as per assignment of max 1 user.
+        /// Creates a new user in the DB with entered username and password.
         /// </summary>
+        /// <remarks>
+        /// The method checks if the password is valid and then creates a new user account.
+        /// Overwrites the existing user (if any), as per assignment of max 1 user.
+        /// Gives an error if the password isn't valid.
+        /// </remarks>
         private void CreateUser()
         {
             Console.Write("Enter a username: \n");
@@ -92,12 +96,12 @@ namespace Assignments.ConsoleUI.Password
         }
 
         /// <summary>
-        /// This method lets the user log in by entering their username and password.
-        /// The method checks if the entered details match the stored ones, if they do, the user is logged in.
-        /// 
-        /// Also kicks the user back to the UserAccountMenu, 
-        /// if you've failed 4 attempts to login.
+        /// Lets the user login with their username and password.
         /// </summary>
+        /// <remarks>
+        /// Checks if the entered credentials matchs the ones in the DB.
+        /// Kicks the user back to <c>UserAccountMenu</c> after 4 failed login attempts.
+        /// </remarks>
         private void Login()
         {
             int attempt = 0;
@@ -123,7 +127,7 @@ namespace Assignments.ConsoleUI.Password
         }
 
         /// <summary>
-        /// This method logs the user out of their current session.
+        /// Logs out the current user.
         /// </summary>
         private void Logout()
         {
@@ -132,10 +136,11 @@ namespace Assignments.ConsoleUI.Password
         }
 
         /// <summary>
-        /// This method lets the user change their password, but only if they are logged in.
-        /// The method prompts the user to enter their new password and checks if it is correct,
-        /// if it is, the password is changed.
+        /// Lets the logged in user change their password.
         /// </summary>
+        /// <remarks>
+        /// Prompts the user to enter new password, which if valid, changes the password.
+        /// </remarks>
         private void ChangePassword()
         {
             Console.Write("\nDo you want to change your password? (y/n): ");
@@ -150,8 +155,8 @@ namespace Assignments.ConsoleUI.Password
         }
 
         /// <summary>
-        /// This method checks if the input is correct.
-        /// If it is not correct, it will show an error message.
+        /// Validates the username and password.
+        /// If it fails, it will show an error message.
         /// </summary>
         /// <param name="result">From the logic class, returns the error for this method to use as an error message</param>
         private void ValidationResultHandle(ValidationResult result)

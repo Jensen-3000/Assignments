@@ -5,12 +5,12 @@ namespace Assignments.Logic.Football
     public class FootballLogic
     {
         /// <summary>
-        /// This method returns a string depending on the ball passes and goal score
+        /// Returns a string depending on the ball passes and if there was a goal.
         /// </summary>
-        /// <param name="ballPasses">Number of passes made</param>
-        /// <param name="goal">Scored or not</param>
+        /// <param name="ballPasses">Number of passes made.</param>
+        /// <param name="goal">Scored or not.</param>
         /// <returns>
-        /// A string based on the input
+        /// A string based on the input.
         /// </returns>
         public string GetScore(int ballPasses, string goal)
         {

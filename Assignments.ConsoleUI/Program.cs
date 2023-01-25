@@ -16,8 +16,7 @@ namespace Assignments.ConsoleUI
                                             "\n\t(0) Exit";
 
 
-        // Set your database location and minimum pw length through the configuration App.config
-        //  Or you can hard code these values and make them a private const string
+        // Set the database location and minimum pw length through the configuration App.config
         private static string DatabasePath = ConfigurationManager.AppSettings["DatabaseLocation"];
         private static string MinimumPasswordLength = ConfigurationManager.AppSettings["MinimumPasswordLength"];
 
@@ -73,7 +72,7 @@ namespace Assignments.ConsoleUI
             Console.ReadKey(); goto MainMenu;
 
         UserAccountAssignment:
-            PasswordUI passwordAssignment = new PasswordUI(DatabasePath, int.Parse(MinimumPasswordLength)); //Fix this parse, no validation
+            PasswordUI passwordAssignment = new PasswordUI(DatabasePath, int.Parse(MinimumPasswordLength)); // TODO: Fix this parse, no validation
             passwordAssignment.UserAccountMenu();
             Console.ReadKey(); goto MainMenu;
         }

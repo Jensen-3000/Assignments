@@ -3,15 +3,19 @@ using System;
 
 namespace Assignments.ConsoleUI.Football
 {
+    /// <summary>
+    /// A class that handles the UI for Football Assignment (2)
+    /// </summary>
     internal class FootballUI
     {
         /// <summary>
-        /// This method allows the user to input the number of football passes made 
-        /// and whether or not a goal was scored. 
-        /// 
-        /// The method uses this information to calculate 
-        /// and return a score using the FootballLogic class.
+        /// Prompts the user for football passes made and if a goal was scored.
         /// </summary>
+        /// <remarks>
+        /// Has a validation check for int, on passes.
+        /// Uses the infomation to calculate and return a string
+        /// from <seealso cref="FootballLogic"/> class, depending on the input.
+        /// </remarks>
         internal void GetFootballScore()
         {
             

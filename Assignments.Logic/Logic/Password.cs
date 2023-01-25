@@ -10,19 +10,27 @@ namespace Assignments.Logic.Password
     /// </summary>
     public class PasswordLogic
     {
-        private readonly int _MINIMUM_PASSWORD_LENGTH; // set via appsettings
-        private readonly string _PATH; // set via appsettings
+        /// <summary>
+        /// Sets minimum password length.
+        /// </summary>
+        /// <remarks>Set via appsettings.</remarks>
+        private readonly int _MINIMUM_PASSWORD_LENGTH;
+        /// <summary>
+        /// Sets path for DB with user credentials.
+        /// </summary>
+        /// <remarks>Set via appsettings.</remarks>
+        private readonly string _PATH;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PasswordLogic"/> class.
         /// </summary>
-        /// <param name="dbPath">The path of the file that stores the credentials.</param>
-        /// <param name="minimumPwLength">The minimum length of the password</param>
         /// <remarks>
         /// The constructor sets the <c>_PATH</c> and <c>_MINIMUM_PASSWORD_LENGTH</c> fields
         /// to the ones from appsettings.
         /// It also calls the <see cref="EnsureDbFileExists()"/> method to ensure the DB exists.
         /// </remarks>
+        /// <param name="dbPath">The path of the file that stores the credentials.</param>
+        /// <param name="minimumPwLength">The minimum length of the password</param>
         public PasswordLogic(string dbPath, int minimumPwLength)
         {
             _PATH = dbPath;
@@ -31,12 +39,8 @@ namespace Assignments.Logic.Password
         }
 
         /// <summary>
-        /// Ensures the DB for storing user credentials exists,
-        /// else creates the file
+        /// Ensures the DB for storing user credentials exists, else creates the file.
         /// </summary>
-        /// <remarks>
-        /// <c>_PATH</c> is read from the appsettings.
-        /// </remarks>
         public void EnsureDbFileExists()
         {
             using (File.Open(_PATH, FileMode.OpenOrCreate)) { }
@@ -45,11 +49,11 @@ namespace Assignments.Logic.Password
         /// <summary>
         /// Creates a new user.
         /// </summary>
-        /// <param name="username">The username to write to file</param>
-        /// <param name="password">The password to write to file</param>
         /// <remarks>
         /// Overwrites the existing user of the DB. (As per assignment)
         /// </remarks>
+        /// <param name="username">The username to write to file</param>
+        /// <param name="password">The password to write to file</param>
         public void CreateNewUser(string username, string password)
         {
             File.WriteAllText(_PATH, username + "\n" + password);
@@ -58,14 +62,12 @@ namespace Assignments.Logic.Password
         /// <summary>
         /// Verifies the entered username and password.
         /// </summary>
-        /// <param name="username">The username to check.</param>
-        /// <param name="password">The password to check.</param>
-        /// <returns>
-        /// A bool value indicating if the credentials are valid.
-        /// </returns>
         /// <remarks>
         /// Compares entered credentials against the credentials stored in the DB.
         /// </remarks>
+        /// <param name="username">The username to check.</param>
+        /// <param name="password">The password to check.</param>
+        /// <returns>A bool value indicating if the credentials are valid.</returns>
         public bool VerifyCredentials(string username, string password)
         {
             if (!File.ReadLines(_PATH).Any())
@@ -79,14 +81,14 @@ namespace Assignments.Logic.Password
         /// <summary>
         /// Changes the password and ensures the new password meets the validation requirements.
         /// </summary>
+        /// <remarks>
+        /// The new password is appended to the DB, keeping the older passwords. (As per assignment)
+        /// </remarks>
         /// <param name="newPassword">The new password to change</param>
         /// <returns>
         /// A ValidationResult Enum that indicates the result of the validation.
         /// <see cref="ValidatePassword(string,string)"/> method is used to validate the new password.
         /// </returns>
-        /// <remarks>
-        /// The new password is appended to the DB, keeping the older passwords. (As per assignment)
-        /// </remarks>
         public ValidationResult ChangePassword(string newPassword)
         {
             string currentUsername = File.ReadLines(_PATH).FirstOrDefault();
@@ -103,9 +105,6 @@ namespace Assignments.Logic.Password
         /// <summary>
         /// Checks if the entered username + password meets all the validation requirements.
         /// </summary>
-        /// <param name="username">The username to check</param>
-        /// <param name="password">The password to check</param>
-        /// <returns>ValidationResult Enum that indicates the result of the validation.</returns>
         /// <remarks>
         /// The validation checks for the following:
         /// <see cref="IsMinimumLength(string)"/>, 
@@ -118,6 +117,9 @@ namespace Assignments.Logic.Password
         /// <see cref="CheckUsernameNotEqualToPassword(string, string)"/>,
         /// <see cref="CheckIfPreviouslyUsedFromFile(string)"/>
         /// </remarks>
+        /// <param name="username">The username to check</param>
+        /// <param name="password">The password to check</param>
+        /// <returns>ValidationResult Enum that indicates the result of the validation.</returns>
         public ValidationResult ValidatePassword(string username, string password)
         {
             if (!IsMinimumLength(password)) return ValidationResult.NotMinimumLengthError;
