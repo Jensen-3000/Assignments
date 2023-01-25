@@ -28,8 +28,12 @@ namespace Assignments.ConsoleUI.Password
         /// This method shows a menu for managing the account.
         /// </summary>
         /// <remarks>
-        /// The menu has options for logging in and out, creating a new account, changing the password 
-        /// and going back to the previous menu.
+        /// <list type="number">
+        /// <item>Login and Out</item>
+        /// <item>Creating a new account</item>
+        /// <item>Changing the password</item>
+        /// <item>Return to previous menu</item>
+        /// </list>
         /// </remarks>
         internal void UserAccountMenu()
         {
@@ -72,9 +76,11 @@ namespace Assignments.ConsoleUI.Password
         /// Creates a new user in the DB with entered username and password.
         /// </summary>
         /// <remarks>
-        /// The method checks if the password is valid and then creates a new user account.
-        /// Overwrites the existing user (if any), as per assignment of max 1 user.
-        /// Gives an error if the password isn't valid.
+        /// <list type="number">
+        /// <item>The method checks if the password is valid and then creates a new user account.</item>
+        /// <item>Overwrites the existing user (if any), as per assignment of max 1 user.</item>
+        /// <item>Gives an error if the password isn't valid.</item>
+        /// </list>
         /// </remarks>
         private void CreateUser()
         {
@@ -99,8 +105,10 @@ namespace Assignments.ConsoleUI.Password
         /// Lets the user login with their username and password.
         /// </summary>
         /// <remarks>
-        /// Checks if the entered credentials matchs the ones in the DB.
-        /// Kicks the user back to <c>UserAccountMenu</c> after 4 failed login attempts.
+        /// <list type="number">
+        /// <item> Checks if the entered credentials matchs the ones in the DB.</item>
+        /// <item>Kicks the user back to <c>UserAccountMenu</c> after 4 failed login attempts.</item>
+        /// </list>
         /// </remarks>
         private void Login()
         {
