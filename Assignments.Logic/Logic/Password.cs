@@ -8,14 +8,10 @@ namespace Assignments.Logic.Password
     /// <summary>
     /// This class contains methods for validating passwords and checking credentials.
     /// </summary>
-    /// <remarks>
-    /// The class contains methods for checking if a password meets certain requirements, 
-    /// changing a password, and verifying the provided credentials against the credentials stored in a file.
-    /// </remarks>
     public class PasswordLogic
     {
-        private readonly int _MINIMUM_PASSWORD_LENGTH; // 12;
-        private readonly string _PATH; // credentials.txt;
+        private readonly int _MINIMUM_PASSWORD_LENGTH; // set via appsettings
+        private readonly string _PATH; // set via appsettings
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PasswordLogic"/> class.
@@ -23,10 +19,9 @@ namespace Assignments.Logic.Password
         /// <param name="dbPath">The path of the file that stores the credentials.</param>
         /// <param name="minimumPwLength">The minimum length of the password</param>
         /// <remarks>
-        /// The constructor sets the <c>_PATH</c> field to the provided dbPath and 
-        /// <c>_MINIMUM_PASSWORD_LENGTH</c> field to the provided minimumPwLength.
-        /// It also calls the <see cref="EnsureDbFileExists()"/> method to ensure 
-        /// that the file specified by the <c>_PATH</c> field exists.
+        /// The constructor sets the <c>_PATH</c> and <c>_MINIMUM_PASSWORD_LENGTH</c> fields
+        /// to the ones from appsettings.
+        /// It also calls the <see cref="EnsureDbFileExists()"/> method to ensure the DB exists.
         /// </remarks>
         public PasswordLogic(string dbPath, int minimumPwLength)
         {
@@ -40,8 +35,7 @@ namespace Assignments.Logic.Password
         /// else creates the file
         /// </summary>
         /// <remarks>
-        /// The location of the file specified by the field <c>_PATH</c>
-        /// is read from the appsettings.
+        /// <c>_PATH</c> is read from the appsettings.
         /// </remarks>
         public void EnsureDbFileExists()
         {
@@ -49,13 +43,12 @@ namespace Assignments.Logic.Password
         }
 
         /// <summary>
-        /// Creates a new user, overwriting the existing contents of the file.
+        /// Creates a new user.
         /// </summary>
         /// <param name="username">The username to write to file</param>
         /// <param name="password">The password to write to file</param>
         /// <remarks>
-        /// The location of the file specified by the field <c>_PATH</c>
-        /// is read from the appsettings.
+        /// Overwrites the existing user of the DB. (As per assignment)
         /// </remarks>
         public void CreateNewUser(string username, string password)
         {
@@ -63,17 +56,15 @@ namespace Assignments.Logic.Password
         }
 
         /// <summary>
-        /// Verifies the provided username and password by checking them against the credentials stored in a file.
+        /// Verifies the entered username and password.
         /// </summary>
         /// <param name="username">The username to check.</param>
         /// <param name="password">The password to check.</param>
         /// <returns>
-        /// A boolean value indicating whether the provided credentials are valid.
+        /// A bool value indicating if the credentials are valid.
         /// </returns>
         /// <remarks>
-        /// The method first checks if the file specified by the field <c>_PATH</c> is empty or not.
-        /// If the file is empty, it returns false, otherwise it compares the provided 
-        /// username and password with the first and last line of the file respectively.
+        /// Compares entered credentials against the credentials stored in the DB.
         /// </remarks>
         public bool VerifyCredentials(string username, string password)
         {
@@ -86,7 +77,7 @@ namespace Assignments.Logic.Password
         }
 
         /// <summary>
-        /// Changes the password and validates the new password against the validation rules.
+        /// Changes the password and ensures the new password meets the validation requirements.
         /// </summary>
         /// <param name="newPassword">The new password to change</param>
         /// <returns>
@@ -94,8 +85,7 @@ namespace Assignments.Logic.Password
         /// <see cref="ValidatePassword(string,string)"/> method is used to validate the new password.
         /// </returns>
         /// <remarks>
-        /// The new password is appended to the file specified by the field <c>_PATH</c>
-        /// which is read from the appsettings.
+        /// The new password is appended to the DB, keeping the older passwords. (As per assignment)
         /// </remarks>
         public ValidationResult ChangePassword(string newPassword)
         {
@@ -111,13 +101,13 @@ namespace Assignments.Logic.Password
         }
 
         /// <summary>
-        /// Checks if the given password meets all the validation requirements.
+        /// Checks if the entered username + password meets all the validation requirements.
         /// </summary>
         /// <param name="username">The username to check</param>
         /// <param name="password">The password to check</param>
-        /// <returns>A ValidationResult Enum that indicates the result of the validation.</returns>
+        /// <returns>ValidationResult Enum that indicates the result of the validation.</returns>
         /// <remarks>
-        /// The validation process includes the following checks:
+        /// The validation checks for the following:
         /// <see cref="IsMinimumLength(string)"/>, 
         /// <see cref="HasUpperCase(string)"/>, 
         /// <see cref="HasLowerCase(string)"/>, 
@@ -152,8 +142,7 @@ namespace Assignments.Logic.Password
         /// <param name="password">The password to check.</param>
         /// <returns>True if the password meets the minimum length requirement, false otherwise.</returns>
         /// <remarks>
-        /// The minimum length requirement is read from the appsettings and is stored in the 
-        /// <c>_MINIMUM_PASSWORD_LENGTH</c> field.
+        /// Gets the field <c>_MINIMUM_PASSWORD_LENGTH</c> from appsettings.
         /// </remarks>
         public bool IsMinimumLength(string password)
         {

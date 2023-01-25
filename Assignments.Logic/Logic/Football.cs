@@ -7,12 +7,10 @@ namespace Assignments.Logic.Football
         /// <summary>
         /// This method returns a string depending on the ball passes and goal score
         /// </summary>
-        /// 
         /// <param name="ballPasses">Number of passes made</param>
         /// <param name="goal">Scored or not</param>
-        /// 
         /// <returns>
-        /// a string based on the input
+        /// A string based on the input
         /// </returns>
         public string GetScore(int ballPasses, string goal)
         {

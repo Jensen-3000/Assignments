@@ -29,7 +29,7 @@
         }
 
         /// <summary>
-        /// Returns and formats the string of a DanceCompetitor object.
+        /// Returns and formats the string of a Dancer.
         /// </summary>
         /// <returns>A string in the format "Name : Points".</returns>
         public override string ToString()

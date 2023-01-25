@@ -34,7 +34,8 @@ namespace Assignments.ConsoleUI
 
         /// <summary>
         /// The main menu for these assignments
-        /// This method uses 'goto' which is a special and exclusive console app keyword which can be used for navigation throughout the code
+        /// This method uses 'goto' which is a special and exclusive console app keyword 
+        /// which can be used for navigation throughout the code
         /// </summary>
         private void MainMenu()
         {
