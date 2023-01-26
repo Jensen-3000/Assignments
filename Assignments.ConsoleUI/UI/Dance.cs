@@ -1,28 +1,32 @@
 ﻿using Assignments.Logic.Dance;
 using System;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Runtime.Remoting.Messaging;
 
 namespace Assignments.ConsoleUI.Dance
 {
     /// <summary>
-    /// This class is used for Assignment 1 (DanceCompetitors)
-    ///     Anything that requires user input/interaction related to Assignment 1 is made through this class
-    ///     It will call any logic it requires from Assignments.Logic and return what we need, then printed to the user via a console UI
+    /// A class that handles the UI for Dance Assignment (1)
     /// </summary>
+    /// <remarks>
+    /// It will call any logic it requires from Logic.Dance and return whats needed, then
+    /// prints to the user via a console UI
+    /// </remarks>
     internal class DanceUI
     {
         /// <summary>
-        /// Ask the user for a name and the number of points they got
+        /// Prompts the user for a Dancer name and points.
         /// </summary>
-        /// <returns>A dance competitor model</returns>
+        /// <remarks>
+        /// Has int validation for points.
+        /// </remarks>
+        /// <returns>
+        /// A DanceCompetitor with the stored values.
+        /// </returns>
         internal DanceCompetitor GetDancer()
         {
             int points;
 
             Console.WriteLine("Enter dancer name:");
-            string name = Console.ReadLine(); // Todo: Need some validation
+            string name = Console.ReadLine();
 
             Console.WriteLine("Enter dancer points:");
             while (!int.TryParse(Console.ReadLine(), out points))

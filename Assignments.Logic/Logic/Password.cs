@@ -1,44 +1,125 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace Assignments.Logic.Password
 {
+    /// <summary>
+    /// This class contains methods for validating passwords and checking credentials.
+    /// </summary>
     public class PasswordLogic
     {
-        private UserAccount _userAccount;
+        /// <summary>
+        /// Sets minimum password length.
+        /// </summary>
+        /// <remarks>Set via appsettings.</remarks>
+        private readonly int _MINIMUM_PASSWORD_LENGTH;
+        /// <summary>
+        /// Sets path for DB with user credentials.
+        /// </summary>
+        /// <remarks>Set via appsettings.</remarks>
+        private readonly string _PATH;
 
-        public readonly int MINIMUM_PASSWORD_LENGTH; // 12;
-        private readonly string PATH; // credentials.txt;
-
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PasswordLogic"/> class.
+        /// </summary>
+        /// <remarks>
+        /// The constructor sets the <c>_PATH</c> and <c>_MINIMUM_PASSWORD_LENGTH</c> fields
+        /// to the ones from appsettings.
+        /// It also calls the <see cref="EnsureDbFileExists()"/> method to ensure the DB exists.
+        /// </remarks>
+        /// <param name="dbPath">The path of the file that stores the credentials.</param>
+        /// <param name="minimumPwLength">The minimum length of the password</param>
         public PasswordLogic(string dbPath, int minimumPwLength)
         {
-            _userAccount = new UserAccount();
-            PATH = dbPath;
-            MINIMUM_PASSWORD_LENGTH = minimumPwLength;
-            CreateDBIfNotFound();
+            _PATH = dbPath;
+            _MINIMUM_PASSWORD_LENGTH = minimumPwLength;
+            EnsureDbFileExists();
         }
 
-        public void CreateUser(string username, string password)
+        /// <summary>
+        /// Ensures the DB for storing user credentials exists, else creates the file.
+        /// </summary>
+        public void EnsureDbFileExists()
         {
-            _userAccount.Username = username;
-            _userAccount.Password = password;
-            File.WriteAllText(PATH, _userAccount.Username + "\n" + _userAccount.Password);
+            using (File.Open(_PATH, FileMode.OpenOrCreate)) { }
         }
 
+        /// <summary>
+        /// Creates a new user.
+        /// </summary>
+        /// <remarks>
+        /// Overwrites the existing user of the DB. (As per assignment)
+        /// </remarks>
+        /// <param name="username">The username to write to file</param>
+        /// <param name="password">The password to write to file</param>
+        public void CreateNewUser(string username, string password)
+        {
+            File.WriteAllText(_PATH, username + "\n" + password);
+        }
+
+        /// <summary>
+        /// Verifies the entered username and password.
+        /// </summary>
+        /// <remarks>
+        /// Compares entered credentials against the credentials stored in the DB.
+        /// </remarks>
+        /// <param name="username">The username to check.</param>
+        /// <param name="password">The password to check.</param>
+        /// <returns>A bool value indicating if the credentials are valid.</returns>
+        public bool VerifyCredentials(string username, string password)
+        {
+            if (!File.ReadLines(_PATH).Any())
+            {
+                return false;
+            }
+            return username == File.ReadLines(_PATH).FirstOrDefault()
+                && password == File.ReadLines(_PATH).LastOrDefault();
+        }
+
+        /// <summary>
+        /// Changes the password and ensures the new password meets the validation requirements.
+        /// </summary>
+        /// <remarks>
+        /// The new password is appended to the DB, keeping the older passwords. (As per assignment)
+        /// </remarks>
+        /// <param name="newPassword">The new password to change</param>
+        /// <returns>
+        /// A ValidationResult Enum that indicates the result of the validation.
+        /// <see cref="ValidatePassword(string,string)"/> method is used to validate the new password.
+        /// </returns>
         public ValidationResult ChangePassword(string newPassword)
         {
-            ValidationResult result = ValidatePassword(_userAccount.Username, newPassword);
+            string currentUsername = File.ReadLines(_PATH).FirstOrDefault();
+
+            ValidationResult result = ValidatePassword(currentUsername, newPassword);
             if (result == ValidationResult.PasswordIsValid)
             {
-                _userAccount.Password = newPassword;
-                File.AppendAllText(PATH, "\n" + newPassword);
+                File.AppendAllText(_PATH, "\n" + newPassword);
                 return ValidationResult.PasswordChangedSuccess;
             }
             return result;
         }
 
+        /// <summary>
+        /// Checks if the entered username + password meets all the validation requirements.
+        /// </summary>
+        /// <remarks>
+        /// The validation checks for the following:
+        /// <see cref="IsMinimumLength(string)"/>, 
+        /// <see cref="HasUpperCase(string)"/>, 
+        /// <see cref="HasLowerCase(string)"/>, 
+        /// <see cref="HasDigit(string)"/>, 
+        /// <see cref="HasSpecialChar(string)"/>,
+        /// <see cref="CannotHaveSpaces(string)"/>,
+        /// <see cref="CannotHaveNumberAtStartOrEnd(string)"/>,
+        /// <see cref="CheckUsernameNotEqualToPassword(string, string)"/>,
+        /// <see cref="CheckIfPreviouslyUsedFromFile(string)"/>
+        /// </remarks>
+        /// <param name="username">The username to check</param>
+        /// <param name="password">The password to check</param>
+        /// <returns>ValidationResult Enum that indicates the result of the validation.</returns>
         public ValidationResult ValidatePassword(string username, string password)
         {
             if (!IsMinimumLength(password)) return ValidationResult.NotMinimumLengthError;
@@ -54,73 +135,103 @@ namespace Assignments.Logic.Password
             return ValidationResult.PasswordIsValid;
         }
 
+
         #region ValidationMethods
 
+        /// <summary>
+        /// Checks if the password meets the minimum length requirement.
+        /// </summary>
+        /// <param name="password">The password to check.</param>
+        /// <returns>True if the password meets the minimum length requirement, false otherwise.</returns>
+        /// <remarks>
+        /// Gets the field <c>_MINIMUM_PASSWORD_LENGTH</c> from appsettings.
+        /// </remarks>
         public bool IsMinimumLength(string password)
         {
-            return password.Length >= MINIMUM_PASSWORD_LENGTH;
+            return password.Length >= _MINIMUM_PASSWORD_LENGTH;
         }
 
+        /// <summary>
+        /// Checks if the password has any uppercase letters.
+        /// </summary>
+        /// <param name="password">The password to check.</param>
+        /// <returns>True if the password has at least one uppercase letter, false otherwise.</returns>
         public bool HasUpperCase(string password)
         {
             return Regex.IsMatch(password, "[A-Z]");
         }
 
+        /// <summary>
+        /// Checks if the password has any lowercase letters.
+        /// </summary>
+        /// <param name="password">The password to check.</param>
+        /// <returns>True if the password has at least one lowercase letter, false otherwise.</returns>
         public bool HasLowerCase(string password)
         {
             return Regex.IsMatch(password, "[a-z]");
         }
 
+        /// <summary>
+        /// Checks if the password has any digits.
+        /// </summary>
+        /// <param name="password">The password to check.</param>
+        /// <returns>True if the password has at least one digit, false otherwise.</returns>
         public bool HasDigit(string password)
         {
             return Regex.IsMatch(password, "[0-9]");
         }
 
+        /// <summary>
+        /// Checks if the password has any special characters.
+        /// </summary>
+        /// <param name="password">The password to check.</param>
+        /// <returns>True if the password has at least one special character, false otherwise.</returns>
         public bool HasSpecialChar(string password)
         {
             return Regex.IsMatch(password, @"[!#$%&'()*+,.:;<=>?@[_`|{}~^/\-\\]");
         }
 
+        /// <summary>
+        /// Checks if the password has any spaces.
+        /// </summary>
+        /// <param name="password">The password to check.</param>
+        /// <returns>True if the password doesn't have any spaces, false otherwise.</returns>
         public bool CannotHaveSpaces(string password)
         {
             return !Regex.IsMatch(password, @"[\s]");
         }
 
+        /// <summary>
+        /// Checks if the password starts or ends with a number.
+        /// </summary>
+        /// <param name="password">The password to check.</param>
+        /// <returns>True if the password does not start or end with a number, false otherwise.</returns>
         public bool CannotHaveNumberAtStartOrEnd(string password)
         {
             return !Regex.IsMatch(password, @"^\d|\d$");
         }
 
+        /// <summary>
+        /// Checks if the username is the same as the password.
+        /// </summary>
+        /// <param name="username">The username to check</param>
+        /// <param name="password">The password to check</param>
+        /// <returns>True if the username is different from the password, false otherwise.</returns>
         public bool CheckUsernameNotEqualToPassword(string username, string password)
         {
             return !(username.ToLower() == password.ToLower());
         }
 
+        /// <summary>
+        /// Check if the password has been used before
+        /// </summary>
+        /// <param name="password">The password to check</param>
+        /// <returns>True if the password has not been used before, false otherwise.</returns>
         public bool CheckIfPreviouslyUsedFromFile(string password)
         {
-            return !File.ReadLines(PATH).Contains(password);
+            return !File.ReadLines(_PATH).Contains(password);
         }
 
         #endregion
-
-        public bool LoadCredentials(string username, string password)
-        {
-            var lines = File.ReadLines(PATH);
-            if (!lines.Any())
-            {
-                return false;
-            }
-            _userAccount.Username = lines.FirstOrDefault();
-            _userAccount.Password = lines.LastOrDefault();
-            return (username == _userAccount.Username && password == _userAccount.Password);
-        }
-
-        public void CreateDBIfNotFound()
-        {
-            if (!File.Exists(PATH))
-            {
-                File.Create(PATH).Dispose();
-            }
-        }
     }
 }

@@ -1,34 +1,40 @@
 ﻿namespace Assignments.Logic.Dance
 {
-    // This class represents a Dance Competitor, with properties for their name and points.
     public class DanceCompetitor
     {
+       
         public string Name { get; private set; }
         public int Points { get; private set; }
 
         /// <summary>
-        /// Create a dance competitor
+        /// Creates a dancer with a name and points
         /// </summary>
-        /// <param name="name">Dance competitors name</param>
-        /// <param name="points">Dance competitors points</param>
+        /// <param name="name">Name of the dancer</param>
+        /// <param name="points">Points the dancer has</param>
         public DanceCompetitor(string name, int points)
         {
             Name = name;
             Points = points;
         }
 
-        // The + operator overload is defined to allow for the merging of two DanceCompetitor objects.
+        /// <summary>
+        /// Combines two dancers into one dancer
+        /// </summary>
+        /// <param name="a">First dancer</param>
+        /// <param name="b">Second dancer</param>
+        /// <returns>New dancer with both names and total points</returns>
         public static DanceCompetitor operator +(DanceCompetitor a, DanceCompetitor b)
         {
             return new DanceCompetitor(a.Name + " & " + b.Name, a.Points + b.Points);
         }
 
-        // The ToString method is overridden to return the name and points of the competitor in a formatted string.
+        /// <summary>
+        /// Returns and formats the string of a Dancer.
+        /// </summary>
+        /// <returns>A string in the format "Name : Points".</returns>
         public override string ToString()
         {
             return Name + " : " + Points;
         }
-
-
     }
 }

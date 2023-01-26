@@ -16,8 +16,7 @@ namespace Assignments.ConsoleUI
                                             "\n\t(0) Exit";
 
 
-        // Set your database location and minimum pw length through the configuration App.config
-        //  Or you can hard code these values and make them a private const string
+        // Set the database location and minimum pw length through the configuration App.config
         private static string DatabasePath = ConfigurationManager.AppSettings["DatabaseLocation"];
         private static string MinimumPasswordLength = ConfigurationManager.AppSettings["MinimumPasswordLength"];
 
@@ -33,9 +32,12 @@ namespace Assignments.ConsoleUI
 
 
         /// <summary>
-        /// The main menu for these assignments
-        /// This method uses 'goto' which is a special and exclusive console app keyword which can be used for navigation throughout the code
+        /// The main menu for these assignments.
         /// </summary>
+        /// <remarks>
+        /// This method uses the 'goto' keyword
+        /// which can be used for navigation throughout the code.
+        /// </remarks>
         private void MainMenu()
         {
         MainMenu:
@@ -72,7 +74,7 @@ namespace Assignments.ConsoleUI
             Console.ReadKey(); goto MainMenu;
 
         UserAccountAssignment:
-            PasswordUI passwordAssignment = new PasswordUI(DatabasePath, int.Parse(MinimumPasswordLength)); //Fix this parse, no validation
+            PasswordUI passwordAssignment = new PasswordUI(DatabasePath, int.Parse(MinimumPasswordLength)); // TODO: Fix this parse, no validation
             passwordAssignment.UserAccountMenu();
             Console.ReadKey(); goto MainMenu;
         }
