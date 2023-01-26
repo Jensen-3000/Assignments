@@ -32,13 +32,6 @@ namespace Assignments.Logic.Football
                 // Using string.Join is faster then a for-loop
                 // as it doesn't create a new string for each pass
                 return string.Join("", Enumerable.Repeat("Huh! ", ballPasses));
-
-                //string passes = string.Empty;
-                //for (int i = 0; i < ballPasses; i++)
-                //{
-                //    passes += "Huh! ";
-                //}
-                //return passes;
             }
         }
     }

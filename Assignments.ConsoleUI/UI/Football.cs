@@ -13,8 +13,8 @@ namespace Assignments.ConsoleUI.Football
         /// </summary>
         /// <remarks>
         /// Has a validation check for int, on passes.
-        /// Uses the infomation to calculate and return a string
-        /// from <seealso cref="FootballLogic"/> class, depending on the input.
+        /// Uses the entered infomation to calculate and return a string
+        /// from <seealso cref="FootballLogic.GetScore(int, string)"/> depending on the input.
         /// </remarks>
         internal void GetFootballScore()
         {
