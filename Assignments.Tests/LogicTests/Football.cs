@@ -28,7 +28,7 @@ namespace Assignments.Tests
             //Act
             string result = _football.GetScore(3, string.Empty);
             //Assert
-            Assert.AreEqual("Huh! Huh! Huh! ", result);
+            Assert.AreEqual("Huh! Huh! Huh!", result);
         }
         [TestMethod]
         public void HowHappyAreWeAboutThePasses_PassesIsTin_HighFiveJubel_Test()

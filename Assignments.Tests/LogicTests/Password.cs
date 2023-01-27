@@ -18,6 +18,7 @@ namespace Assignments.Tests
         {
             //Arrange
             _password = new PasswordLogic(DatabasePath, int.Parse(MinimumPasswordLength));
+            using (File.Open(DatabasePath, FileMode.OpenOrCreate)) { }
         }
 
         [TestMethod]
